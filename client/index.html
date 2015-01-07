@@ -1,1 +1,16 @@
-hello world
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+        <script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+        <script type="text/javascript" src="bower_components/angular-ui/build/angular-ui.min.js"></script>
+        <link rel="stylesheet" href="bower_components/angular-ui/build/angular-ui.min.css" type="text/css" />
+    </head>
+    <body>
+        <div ng-view>
+            Shouldn't display this...
+        </div>
+        <script type="text/javascript" src="app.js"></script>
+        <script type="text/javascript" src="home/HomeController.js"></script>
+    </body>
+</html>
