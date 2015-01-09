@@ -1,3 +1,9 @@
 <div>
     Controller says: {{ homeCtrl.message }}
 </div>
+<div ng-if="homeCtrl.user">
+    Signed in user id is: {{ homeCtrl.user }}
+</div>
+<div ng-if="!homeCtrl.user">
+    Sign in with <a href="/auth/google">Google</a>
+</div>
