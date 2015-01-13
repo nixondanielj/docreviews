@@ -1,9 +1,13 @@
 <div>
     Controller says: {{ homeCtrl.message }}
 </div>
-<div ng-if="homeCtrl.user">
-    Signed in user id is: {{ homeCtrl.user }}
+<div>
+    Sign in with <a href="/auth/google/init">Google</a>
 </div>
-<div ng-if="!homeCtrl.user">
-    Sign in with <a href="/auth/google">Google</a>
+<button ng-click="homeCtrl.refreshStatus()">Check Status</button>
+<div ng-if="homeCtrl.webreqAuth">
+    Web reqs are authed!
+</div>
+<div ng-if="homeCtrl.socketAuth">
+    Sockets are authed!
 </div>
