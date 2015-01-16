@@ -19,6 +19,7 @@ var key = 'mykey',
     GOOGLE_CLIENT_ID = '33815653519-jh94hqfkkumbgdsrb05ck1eoiea7kf8u.apps.googleusercontent.com',
     GOOGLE_CLIENT_SECRET = '2DtFN21fZsU4ph4rBTvvzxAU';
 
+var User = require('./models/User');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -28,19 +29,45 @@ passport.use(new GoogleStrategy({
         callbackURL: 'https://mymean-nixondanielj.c9.io/auth/google'
     },
     function(accessToken, refreshToken, profile, done){
-        // find user here
-        done(null, profile);
+        User.findOne({ email: profile.emails[0] }, function(err, user){
+            if(err){
+                // db error
+                done(err, null);
+            } else if(user){
+                // user exists, return it
+                done(null, user._id);
+            } else {
+                // user does not exist, create it
+                User.create({ 
+                    email: profile.emails[0], 
+                    displayName: profile.displayName || profile.emails[0]
+                }, function(err, user){
+                    if(err){
+                        console.log(err);
+                        done(err, null);
+                    } else {
+                        done(null, user);
+                    }
+                });
+            }
+        });
     })
 );
 
 passport.serializeUser(function(user, callback){
         console.log('serializing user.');
-        callback(null, user);
+        callback(null, user._id);
     });
 
-passport.deserializeUser(function(user, callback){
+passport.deserializeUser(function(id, callback){
        console.log('deserialize user.');
-       callback(null, user);
+       User.findById(id, function(err, user){
+           if(!err && user){
+               callback(null, user);
+           } else {
+               callback(err, user);
+           }
+       });
     });
 
 app.use(session({
